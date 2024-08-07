@@ -1,0 +1,14 @@
+[
+  {
+    "_id": { "$oid":"665c85da8e0bcad06abe8026"},
+    "name": "Jon Skeet"
+  },
+  {
+    "_id": { "$oid":"665c85da8e0bcad06abe8027"},
+    "name": "Martin Fowler"
+  },
+  {
+    "_id": { "$oid":"665c85da8e0bcad06abe8028"},
+    "name": "Erich Gamma"
+  }
+]

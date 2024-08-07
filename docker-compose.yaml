@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  mongo-simple:
+    container_name: mongo-simple
+    image: mongo
+    # See: https://www.mongodb.com/docs/manual/reference/program/mongod/
+    # Or use: docker run -it --rm mongo --help
+    # Or use: mongod --help
+    # command: --wiredTigerCacheSizeGB 1.5 # == 1.5GB
+    volumes:
+      - db:/data/db
+    ports:
+      - "27010:27017"
+    environment:
+      # Initial database
+      MONGO_INITDB_DATABASE: simple-app
+
+      # In the authSource=admin
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD}
+
+
+  mongo-js:
+    container_name: mongo-js-load
+    image: mongo
+    volumes:
+      - db-js:/data/db
+      - ./load-js:/docker-entrypoint-initdb.d
+    ports:
+      - "27009:27017"
+    environment:
+      MONGO_INITDB_DATABASE: jsapp
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD}
+
+
+  mongo-sh:
+    container_name: mongo-sh-load
+    image: mongo
+    volumes:
+      - db-sh:/data/db
+      - ./load-sh/scripts:/docker-entrypoint-initdb.d
+      - ./load-sh/data:/mongo-seed-jsons
+    ports:
+      - "27008:27017"
+    environment:
+      MONGO_INITDB_DATABASE: shapp
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD}
+
+
+  mongo-synology:
+    container_name: mongo-syno-load
+    build:
+      context: ./load-syno
+      dockerfile: Dockerfile
+    volumes:
+      - db-syno:/data/db
+    ports:
+      - "27007:27017"
+    environment:
+      MONGO_INITDB_DATABASE: synoapp
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD}
+
+
+volumes:
+  db: {}
+  db-js: {}
+  db-sh: {}
+  db-syno: {}
