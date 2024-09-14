@@ -84,9 +84,25 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD}
 
 
+  mongo-secure:
+    container_name: mongo-secure
+    image: mongo
+    volumes:
+      - db-secure:/data/db
+      - ./load-security:/docker-entrypoint-initdb.d
+    ports:
+      - "27005:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PWD}
+      MONGO_INITDB_DATABASE: ${OTHER_DB}
+      OTHER_USER: ${OTHER_USER}
+      OTHER_PWD: ${OTHER_PWD}
+
 volumes:
   db: {}
   db-js: {}
   db-sh: {}
   db-conf: {}
   db-syno: {}
+  db-secure: {}
